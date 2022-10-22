@@ -159,14 +159,38 @@ public class TelevisoreServiceImpl implements TelevisoreService {
 
 	@Override
 	public Televisore televisorePiuGrande() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Televisore result = new Televisore();
+		try(Connection connection = MyConnection.getConnection(Constants.DRIVER_NAME, Constants.CONNECTION_URL)) {
+
+			// inietto la connection nel dao
+			televisoreDao.setConnection(connection);
+
+			// eseguo quello che realmente devo fare
+			result = televisoreDao.biggerTv();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} 
+		return result;
 	}
 
 	@Override
-	public List<Televisore> listaMarcheTelevisoriProdottiNegliUltimiSeiMesi() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Televisore> listaMarcheTelevisoriProdottiNegliUltimiSeiMesi(Date data) throws Exception {
+		List<Televisore> result = new ArrayList<>();
+		try(Connection connection = MyConnection.getConnection(Constants.DRIVER_NAME, Constants.CONNECTION_URL)) {
+
+			// inietto la connection nel dao
+			televisoreDao.setConnection(connection);
+
+			// eseguo quello che realmente devo fare
+			result = televisoreDao.listOfBrandsTelevisionsProductsInTheLastSixMonths(data);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} 
+		return result;
 	}
 
 }

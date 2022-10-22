@@ -10,6 +10,6 @@ public interface TelevisoreDAO extends IBaseDAO<Televisore>{
 	
 	public List<Televisore>allTVsProductsInAIntervalOfdate(Date iniziale, Date finale) throws Exception;
 	public Televisore biggerTv()throws Exception;
-	public List<Televisore>listOfBrandsTelevisionsProductsInTheLastSixMonths() throws Exception;
+	public List<Televisore>listOfBrandsTelevisionsProductsInTheLastSixMonths(Date data) throws Exception;
 
 }

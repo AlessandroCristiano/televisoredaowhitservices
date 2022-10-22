@@ -223,13 +223,53 @@ public class TelevisoreDAOImpl extends AbstractMySQLDAO implements TelevisoreDAO
 
 	@Override
 	public Televisore biggerTv() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		if (isNotActive())
+			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+
+		Televisore teleTemp = null;
+		try (Statement ps = connection.createStatement();
+				ResultSet rs = ps.executeQuery("select max(pollici) as pollici from televisore;")) {
+			if (rs.next()) {
+				teleTemp = new Televisore();
+				teleTemp.setPollici(rs.getInt("pollici"));
+			} else {
+				teleTemp = null;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return teleTemp;
 	}
 
 	@Override
-	public List<Televisore> listOfBrandsTelevisionsProductsInTheLastSixMonths() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Televisore> listOfBrandsTelevisionsProductsInTheLastSixMonths(Date data) throws Exception {
+		if(isNotActive())
+			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+		if(data==null)
+			throw new Exception("Valore di input non ammesso.");
+		
+		Televisore teleTemp=null;
+		List<Televisore> risult = new ArrayList<>();
+		try (PreparedStatement ps = connection.prepareStatement("select * from Televisore where dataproduzione>?")) {
+
+			ps.setDate(1, new java.sql.Date(data.getTime()));
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					teleTemp = new Televisore();
+					teleTemp.setId(rs.getLong("ID"));
+					teleTemp.setMarca(rs.getString("marca"));
+					teleTemp.setModello(rs.getString("modello"));
+					teleTemp.setPollici(rs.getInt("pollici"));
+					teleTemp.setDataproduzione(rs.getDate("dataproduzione"));
+					risult.add(teleTemp);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return risult;
 	}
 }
